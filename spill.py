@@ -1,4 +1,5 @@
 import random
+import pygame
 
 class Cards:
     def __init__(self, suit, rank):
