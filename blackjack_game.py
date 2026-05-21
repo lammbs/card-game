@@ -14,11 +14,21 @@ title = pygame.image.load("img/Skjermbilde_2026-04-30_091201-removebg-preview.pn
 playbutton = pygame.image.load("img/play-button-icon-png-5-removebg-preview.png").convert_alpha()
 rules = pygame.image.load("img/466-4660322_rules-test-rules-icon-transparent-background-removebg-preview.png").convert_alpha()
 exitbutton = pygame.image.load("img/3E0657-1PTE-removebg-preview.png").convert_alpha()
+ruleimg = pygame.image.load("img/import-illustrator-image.pygame_rules.png").convert_alpha()
 
-
+# Buttons: position and scaling
 playbutton = blackjack_buttons.Buttons(500, 270, playbutton, 1.8)
-rules = blackjack_buttons.Buttons(-10, 1100, rules, 0.222)
+rules = blackjack_buttons.Buttons(-10, 950, rules, 0.5)
 exitbutton = blackjack_buttons.Buttons(1820, 1100, exitbutton, 0.199)
+
+
+def show_rules():
+    window.fill((43, 130, 57))
+    window.blit(ruleimg, (500, 50))
+    pygame.display.update()
+    while True:
+        if exitbutton.draw(window):
+            break
 
 # Game loop
 run = True
@@ -33,7 +43,8 @@ while run:
 
     if playbutton.draw(window):
         print("Play button clicked")
-    rules.draw(window)
+    if rules.draw(window):
+        show_rules()
     if exitbutton.draw(window):
         run = False
 
