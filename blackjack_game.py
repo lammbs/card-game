@@ -1,7 +1,7 @@
 import random
 import copy
+from unittest import result
 import pygame
-import blackjack_buttons
 
 # The game window
 pygame.init()
@@ -29,19 +29,6 @@ one_deck = 4 * cards
 decks = 4
 game_deck = copy.deepcopy(decks * one_deck)
 
-# Images
-title = pygame.image.load("img/Skjermbilde_2026-04-30_091201-removebg-preview.png").convert_alpha()
-playbutton = pygame.image.load("img/play-button-icon-png-5-removebg-preview.png").convert_alpha()
-rules = pygame.image.load("img/466-4660322_rules-test-rules-icon-transparent-background-removebg-preview.png").convert_alpha()
-exitbutton = pygame.image.load("img/3E0657-1PTE-removebg-preview.png").convert_alpha()
-ruleimg = pygame.image.load("img/import-illustrator-image.pygame_rules.png").convert_alpha()
-returnbutton = pygame.image.load("img/pngtree-blue-round-crystal-button-return-icon-png-image_4405424.png").convert_alpha()
-
-# Buttons: position and scaling
-playbutton = blackjack_buttons.Buttons(500, 270, playbutton, 1.8)
-rules = blackjack_buttons.Buttons(-10, 950, rules, 0.5)
-exitbutton = blackjack_buttons.Buttons(1820, 1100, exitbutton, 0.199)
-returnbutton = blackjack_buttons.Buttons(10, 1100, returnbutton, 0.5)
 
 # deal cards
 def deal_cards(current_hand, current_deck):
@@ -60,21 +47,22 @@ def draw_scores(player, dealer):
 # drawing cars visually
 def draw_cards(player, dealer, reveal):
     for i in range(len(player)):
-        pygame.draw.rect(window, "white", [70 + (70 *i), 460,  + (5 * i), 220, 260], 0, 5)
-        window.blit(font.render(player[i], True, "black"), (75 + 70*i, 465 + 5*i))
-        window.blit(font.render(player[i], True, "black"), (75 + 70*i, 665 + 5*i))
-        pygame.draw.rect(window, "red", [70 + (70 *i), 460,  + (5 * i), 120, 220], 5, 5)
+        pygame.draw.rect(window, 'white', [70 + (70 * i), 460 + (5 * i), 120, 220], 0, 5)
+        window.blit(font.render(player[i], True, 'black'), (75 + 70 * i, 465 + 5 * i))
+        window.blit(font.render(player[i], True, 'black'), (75 + 70 * i, 635 + 5 * i))
+        pygame.draw.rect(window, 'red', [70 + (70 * i), 460 + (5 * i), 120, 220], 5, 5)
 
-    # dealer hides one card
+    # if player hasn't finished turn, dealer will hide one card
     for i in range(len(dealer)):
-        pygame.draw.rect(window, "white", [70 + (70 *i), 160,  + (5 * i), 220, 260], 0, 5)
+        pygame.draw.rect(window, 'white', [70 + (70 * i), 160 + (5 * i), 120, 220], 0, 5)
         if i != 0 or reveal:
-            window.blit(font.render(dealer[i], True, "black"), (75 + 70*i, 165 + 5*i))
-            window.blit(font.render(dealer[i], True, "black"), (75 + 70*i, 365 + 5*i))
+            window.blit(font.render(dealer[i], True, 'black'), (75 + 70 * i, 165 + 5 * i))
+            window.blit(font.render(dealer[i], True, 'black'), (75 + 70 * i, 335 + 5 * i))
         else:
-            window.blit(font.render("?", True, "black"), (75 + 70*i, 165 + 5*i))
-            window.blit(font.render("?", True, "black"), (75 + 70*i, 365 + 5*i))
-        pygame.draw.rect(window, "blue", [70 + (70 *i), 160,  + (5 * i), 120, 220], 5, 5)
+            window.blit(font.render('???', True, 'black'), (75 + 70 * i, 165 + 5 * i))
+            window.blit(font.render('???', True, 'black'), (75 + 70 * i, 335 + 5 * i))
+        pygame.draw.rect(window, 'blue', [70 + (70 * i), 160 + (5 * i), 120, 220], 5, 5)
+
 
 
 
@@ -120,14 +108,16 @@ def draw_game(act, record, results):
         button_list.append(stand)
         score_text = font.render(f"Wins: {record[0]} | Losses: {record[1]} | Ties: {record[2]}", True, "black")
         window.blit(score_text, (165, 60))
+
         if outcome != 0:
-            window.blit(font.render(results[results], True, "black"), (165, 140))
-            deal = pygame.draw.rect(window, "white", [150, 220, 300, 100], 0, 5)
-            pygame.draw.rect(window, "green", [150, 220, 300, 100], 3, 5)
-            pygame.draw.rect(window, "black", [153, 223, 294, 94], 3, 5)
-            deal_text = font.render("TRY AGAIN?", True, "black")
+            window.blit(font.render(results[result], True, 'white'), (15, 25))
+            deal = pygame.draw.rect(window, 'white', [150, 220, 300, 100], 0, 5)
+            pygame.draw.rect(window, 'green', [150, 220, 300, 100], 3, 5)
+            pygame.draw.rect(window, 'black', [153, 223, 294, 94], 3, 5)
+            deal_text = font.render('NEW HAND', True, 'black')
             window.blit(deal_text, (165, 250))
             button_list.append(deal)
+
     return button_list
 
 # check for win or loss
@@ -152,12 +142,11 @@ def check_endgame(hand_active, dealer_score, player_score, outcome, totals, add)
     return outcome, totals, add
 
 
-# Game loop
+# game loop
 run = True
 while run:
     pygame.time.delay(60)
     window.fill((43, 130, 57))
-    window.blit(title, (400, 50))
 
     if initial_deal:
         for i in range(2):
@@ -174,12 +163,6 @@ while run:
                 dealer_hand, game_deck = deal_cards(dealer_hand, game_deck)
         draw_scores(player_score, dealer_score)
     buttons = draw_game(active, records, outcome)
-
-    if playbutton.draw(window):
-        draw_game(active, records, outcome)
-
-    if exitbutton.draw(window):
-        run = False
 
 
     # Event handler
