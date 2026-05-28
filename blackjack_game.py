@@ -2,6 +2,12 @@ import random
 import copy
 import pygame
 
+# The game window
+pygame.init()
+window = pygame.display.set_mode((1920,1200), pygame.RESIZABLE)
+pygame.display.set_caption("Jackass")
+font = pygame.font.SysFont("Arial", 50)
+
 class jackblack():
     def __init__(self):
         self.active = False
@@ -125,11 +131,6 @@ class jackblack():
                 add = False
         return outcome, totals, add
 
-# The game window
-pygame.init()
-window = pygame.display.set_mode((1920,1200), pygame.RESIZABLE)
-pygame.display.set_caption("Jackass")
-font = pygame.font.SysFont("Arial", 50)
 
 #cards 
 cards = ['2', '3', '4', '5', '6', '7', '8', '9', '10', 'J', 'Q', 'K', 'A']
