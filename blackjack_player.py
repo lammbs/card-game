@@ -3,14 +3,12 @@ import copy
 from unittest import result
 import pygame
 
-# The game window
+# the game window
 pygame.init()
 window = pygame.display.set_mode((1920,1200), pygame.RESIZABLE)
 pygame.display.set_caption("Jackass")
 font = pygame.font.SysFont("Arial", 50)
 smaller_font = pygame.font.SysFont("Arial", 45)
-
-# MIDTEN AV SKJERMEN DIN ER 960, 600
 
 # game variables
 active = False
@@ -26,14 +24,14 @@ hand_active = False
 add_score = False
 results = ['', 'PLAYER BUSTED o_O', 'Player WINS! :)', 'DEALER WINS :(', 'TIE GAME...']
 
-#cards 
+# cards
 cards = ['2', '3', '4', '5', '6', '7', '8', '9', '10', 'J', 'Q', 'K', 'A']
 one_deck = 4 * cards
 decks = 4
 game_deck = copy.deepcopy(decks * one_deck)
 
 
-# deal cards by selecting randomly from deck, and make function for one card at a time
+# dealing the cards and removing them from the deck
 def deal_cards(current_hand, current_deck):
     card = random.randint(0, len(current_deck))
     current_hand.append(current_deck[card - 1])
@@ -41,23 +39,20 @@ def deal_cards(current_hand, current_deck):
     return current_hand, current_deck
 
 
-# draw scores for player and dealer on window
-# CORDS OKAY
+# drawing the scores
 def draw_scores(player, dealer):
     window.blit(font.render(f'Score[{player}]', True, 'white'), (1600, 600))
     if reveal_dealer:
         window.blit(font.render(f'Score[{dealer}]', True, 'white'), (1600, 400))
 
 
-# draw cards visually onto window
-# FIXED!!!!
+# draw the cards
 def draw_cards(player, dealer, reveal):
     for i in range(len(player)):
         pygame.draw.rect(window, 'white', [720 + (70 * i), 650 + (5 * i), 150, 225], 0, 5)
         window.blit(smaller_font.render(player[i], True, 'black'), (726 + 70 * i, 650 + 5 * i))
         window.blit(smaller_font.render(player[i], True, 'black'), (726 + 70 * i, 820 + 5 * i))
         pygame.draw.rect(window, 'red', [720 + (70 * i), 650 + (5 * i), 150, 225], 5, 5)
-    # if player hasn't finished turn, dealer will hide one card
     for i in range(len(dealer)):
         pygame.draw.rect(window, 'white', [720 + (70 * i), 160 + (5 * i), 150, 225], 0, 5)
         if i != 0 or reveal:
@@ -68,8 +63,7 @@ def draw_cards(player, dealer, reveal):
             window.blit(smaller_font.render('???', True, 'black'), (725 + 70 * i, 330 + 5 * i))
         pygame.draw.rect(window, 'blue', [720 + (70 * i), 160 + (5 * i), 150, 225], 5, 5)
 
-
-# pass in player or dealer hand and get best score possible
+# calculating the score of player and dealers hand
 def calculate_score(hand):
     hand_score = 0
     aces_count = hand.count('A')
@@ -87,18 +81,15 @@ def calculate_score(hand):
                 hand_score -= 10
     return hand_score
 
-
 # draw game conditions and buttons
 def draw_game(act, record, outcome):
     button_list = []
-    # initially on startup (not active) only option is to deal new hand
     if not act:
         deal = pygame.draw.rect(window, 'white', [760, 580, 300, 100], 0, 5)
         pygame.draw.rect(window, 'green', [760, 580, 300, 100], 3, 5)
         deal_text = font.render('DEAL HAND', True, 'black')
         window.blit(deal_text, (792, 600))
         button_list.append(deal)
-    # once game started, shot hit and stand buttons and win/loss records
     else:
         hit = pygame.draw.rect(window, 'white', [610, 1000, 300, 100], 0, 5)
         pygame.draw.rect(window, 'green', [610, 1000, 300, 100], 3, 5)
@@ -122,10 +113,8 @@ def draw_game(act, record, outcome):
         button_list.append(deal)
     return button_list
 
-# check endgame conditions function
+# checking the results
 def check_endgame(hand_act, deal_score, play_score, outcome, totals, add):
-    # check end game scenarios is player has stood, busted or blackjacked
-    # outcome 1- player bust, 2-win, 3-loss, 4-push
     if not hand_act and deal_score >= 17:
         if play_score > 21:
             outcome = 1

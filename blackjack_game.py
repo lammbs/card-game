@@ -63,9 +63,6 @@ def draw_cards(player, dealer, reveal):
             window.blit(font.render('???', True, 'black'), (75 + 70 * i, 335 + 5 * i))
         pygame.draw.rect(window, 'blue', [70 + (70 * i), 160 + (5 * i), 120, 220], 5, 5)
 
-
-
-
 # calculate score of hand
 def calculate_score(hand):
     hand_score = 0
@@ -110,7 +107,7 @@ def draw_game(act, record, results):
         window.blit(score_text, (165, 60))
 
         if outcome != 0:
-            window.blit(font.render(results[result], True, 'white'), (15, 25))
+            window.blit(font.render(results[outcome], True, 'white'), (15, 25))
             deal = pygame.draw.rect(window, 'white', [150, 220, 300, 100], 0, 5)
             pygame.draw.rect(window, 'green', [150, 220, 300, 100], 3, 5)
             pygame.draw.rect(window, 'black', [153, 223, 294, 94], 3, 5)
@@ -125,13 +122,13 @@ def check_endgame(hand_active, dealer_score, player_score, outcome, totals, add)
     # player blackjacks, stands or busts
     if not hand_active and dealer_score >= 17:
         if player_score > 21:
-            results = 1
+            outcome = 1
         elif dealer_score < player_score <= 21 or dealer_score > 21:
-            results = 2
+            outcome = 2
         elif player_score < dealer_score <= 21:
-            results = 3
+            outcome = 3
         else:
-            results = 4
+            outcome = 4
         if add:
             if outcome == 1 or outcome == 3:
                 totals[1] += 1 
@@ -140,7 +137,6 @@ def check_endgame(hand_active, dealer_score, player_score, outcome, totals, add)
             else: totals[2] += 1
             add = False
     return outcome, totals, add
-
 
 # game loop
 run = True
@@ -163,7 +159,6 @@ while run:
                 dealer_hand, game_deck = deal_cards(dealer_hand, game_deck)
         draw_scores(player_score, dealer_score)
     buttons = draw_game(active, records, outcome)
-
 
     # Event handler
     for event in pygame.event.get():
